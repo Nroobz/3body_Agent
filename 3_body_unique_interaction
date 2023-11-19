@@ -1,0 +1,74 @@
+import matplotlib.pyplot as plt
+import numpy as np
+
+class Body:
+    """
+    Represents a celestial body in the Three-Body Problem.
+    Includes metaphorical attributes representing aspects of a GPT agent's response.
+    """
+    def __init__(self, position, velocity, mass, data_analysis=1, creativity=1, context=1):
+        self.position = np.array(position, dtype='float64')
+        self.velocity = np.array(velocity, dtype='float64')
+        self.mass = mass
+        self.data_analysis = data_analysis
+        self.creativity = creativity
+        self.context = context
+
+    def update_position(self, dt):
+        self.position += self.velocity * dt
+
+class ThreeBodySimulation:
+    """
+    Simulates the Three-Body Problem with metaphorical extensions.
+    """
+    def __init__(self, bodies):
+        self.bodies = bodies
+
+    def compute_gravitational_force(self, body1, body2):
+        G = 6.67430e-11  # Gravitational constant
+        r_vec = body1.position - body2.position
+        r_mag = np.linalg.norm(r_vec)
+        r_hat = r_vec / r_mag
+        force_mag = G * body1.mass * body2.mass / r_mag**2
+        force = -force_mag * r_hat
+        return force
+
+    def update_system(self, dt):
+        forces = [np.zeros(2) for _ in self.bodies]
+        for i, body1 in enumerate(self.bodies):
+            for j, body2 in enumerate(self.bodies):
+                if i != j:
+                    force = self.compute_gravitational_force(body1, body2)
+                    forces[i] += force / body1.mass
+
+        for i, body in enumerate(self.bodies):
+            body.velocity += forces[i] * dt
+            body.update_position(dt)
+
+def run_simulation(sim, duration, dt):
+    positions = [[] for _ in sim.bodies]
+    for _ in np.arange(0, duration, dt):
+        for i, body in enumerate(sim.bodies):
+            positions[i].append(body.position.copy())
+        sim.update_system(dt)
+    return positions
+
+# Create three bodies with initial positions, velocities, and metaphorical attributes
+body1 = Body([100, 300], [0, -10], 5e30, data_analysis=10)
+body2 = Body([-200, -100], [10, 20], 5e30, creativity=15)
+body3 = Body([50, -200], [-20, 10], 5e30, context=20)
+
+# Set up and run the simulation
+sim = ThreeBodySimulation([body1, body2, body3])
+positions = run_simulation(sim, duration=10000, dt=1)
+
+# Plotting the trajectories
+plt.figure(figsize=(8, 6))
+for i, pos in enumerate(positions):
+    pos = np.array(pos)
+    plt.plot(pos[:, 0], pos[:, 1], label=f'Body {i+1}')
+plt.xlabel('X Position')
+plt.ylabel('Y Position')
+plt.title('Three-Body Simulation with Metaphorical GPT Aspects')
+plt.legend()
+plt.show()
