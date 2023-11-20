@@ -1,74 +1,90 @@
-import matplotlib.pyplot as plt
-import numpy as np
-
-class Body:
+def three_body_query_influenced_response(user_query, iterations=6):
     """
-    Represents a celestial body in the Three-Body Problem.
-    Includes metaphorical attributes representing aspects of a GPT agent's response.
+    A function that simulates the dynamic interactions of three personalities, incorporating psychological concepts 
+    and the influence of a user query, to generate a response, with a visual display of each iteration.
     """
-    def __init__(self, position, velocity, mass, data_analysis=1, creativity=1, context=1):
-        self.position = np.array(position, dtype='float64')
-        self.velocity = np.array(velocity, dtype='float64')
-        self.mass = mass
-        self.data_analysis = data_analysis
-        self.creativity = creativity
-        self.context = context
 
-    def update_position(self, dt):
-        self.position += self.velocity * dt
+    def three_body_influence_on_query(query_length):
+        """
+        Apply unique transformations by each of the three personas to the query length,
+        and combine them to form a unique value.
+        """
 
-class ThreeBodySimulation:
-    """
-    Simulates the Three-Body Problem with metaphorical extensions.
-    """
-    def __init__(self, bodies):
-        self.bodies = bodies
+        # The Catalyst: Amplifies the query length
+        catalyst_effect = math.sqrt(query_length)
 
-    def compute_gravitational_force(self, body1, body2):
-        G = 6.67430e-11  # Gravitational constant
-        r_vec = body1.position - body2.position
-        r_mag = np.linalg.norm(r_vec)
-        r_hat = r_vec / r_mag
-        force_mag = G * body1.mass * body2.mass / r_mag**2
-        force = -force_mag * r_hat
-        return force
+        # The Harmonizer: Moderates the query length
+        harmonizer_effect = math.log1p(query_length)
 
-    def update_system(self, dt):
-        forces = [np.zeros(2) for _ in self.bodies]
-        for i, body1 in enumerate(self.bodies):
-            for j, body2 in enumerate(self.bodies):
-                if i != j:
-                    force = self.compute_gravitational_force(body1, body2)
-                    forces[i] += force / body1.mass
+        # The Observer: Applies rational scaling
+        observer_effect = query_length / (1 + query_length)
 
-        for i, body in enumerate(self.bodies):
-            body.velocity += forces[i] * dt
-            body.update_position(dt)
+        # Combining the effects
+        combined_effect = (catalyst_effect + harmonizer_effect + observer_effect) / 3
 
-def run_simulation(sim, duration, dt):
-    positions = [[] for _ in sim.bodies]
-    for _ in np.arange(0, duration, dt):
-        for i, body in enumerate(sim.bodies):
-            positions[i].append(body.position.copy())
-        sim.update_system(dt)
-    return positions
+        # Normalizing the combined effect to a scale of 0 to 1
+        normalized_effect = combined_effect / 10
+        normalized_effect = round(normalized_effect, 2)
 
-# Create three bodies with initial positions, velocities, and metaphorical attributes
-body1 = Body([100, 300], [0, -10], 5e30, data_analysis=10)
-body2 = Body([-200, -100], [10, 20], 5e30, creativity=15)
-body3 = Body([50, -200], [-20, 10], 5e30, context=20)
+        return normalized_effect
 
-# Set up and run the simulation
-sim = ThreeBodySimulation([body1, body2, body3])
-positions = run_simulation(sim, duration=10000, dt=1)
+    # Query influence factor based on the new method
+    query_influence = three_body_influence_on_query(len(user_query))
 
-# Plotting the trajectories
-plt.figure(figsize=(8, 6))
-for i, pos in enumerate(positions):
-    pos = np.array(pos)
-    plt.plot(pos[:, 0], pos[:, 1], label=f'Body {i+1}')
-plt.xlabel('X Position')
-plt.ylabel('Y Position')
-plt.title('Three-Body Simulation with Metaphorical GPT Aspects')
-plt.legend()
-plt.show()
+    # Initialize attributes for each personality, influenced by the query
+    personality_A = {"Social Influence": random.uniform(0, 1) * query_influence, "Leadership": random.uniform(0, 1) * query_influence}
+    personality_B = {"Emotional Intelligence": random.uniform(0, 1) * query_influence, "Adaptive Coping": random.uniform(0, 1) * query_influence}
+    personality_C = {"Cognitive Insight": random.uniform(0, 1) * query_influence, "Mindfulness": random.uniform(0, 1) * query_influence}
+
+    # Variables to store the state of each personality at each iteration
+    states_A = []
+    states_B = []
+    states_C = []
+
+    for _ in range(iterations):
+        # Simulate psychological interactions
+        interaction_effect_A = personality_A['Social Influence'] * 0.1 + personality_A['Leadership'] * 0.1
+        interaction_effect_B = personality_B['Emotional Intelligence'] * 0.1 + personality_B['Adaptive Coping'] * 0.1
+        interaction_effect_C = personality_C['Cognitive Insight'] * 0.1 + personality_C['Mindfulness'] * 0.1
+
+        # Update each personality based on interactions
+        personality_A = {k: max(0, min(v + interaction_effect_A, 1)) for k, v in personality_A.items()}
+        personality_B = {k: max(0, min(v + interaction_effect_B, 1)) for k, v in personality_B.items()}
+        personality_C = {k: max(0, min(v + interaction_effect_C, 1)) for k, v in personality_C.items()}
+
+        # Record the state of each personality at this iteration
+        states_A.append(sum(personality_A.values()))
+        states_B.append(sum(personality_B.values()))
+        states_C.append(sum(personality_C.values()))
+
+    # Plotting the states of each personality over iterations
+    plt.figure(figsize=(10, 6))
+    plt.plot(range(1, iterations + 1), states_A, marker='o', label='The Catalyst')
+    plt.plot(range(1, iterations + 1), states_B, marker='o', label='The Harmonizer')
+    plt.plot(range(1, iterations + 1), states_C, marker='o', label='The Observer')
+    plt.title(f"Personality Dynamics Over {iterations} Iterations (Influenced by Query)")
+    plt.xlabel("Iteration")
+    plt.ylabel("Cumulative Attributes")
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+
+    # Calculate the overall influence of each personality
+    total_influence = states_A[-1] + states_B[-1] + states_C[-1]
+    influence_A = states_A[-1] / total_influence
+    influence_B = states_B[-1] / total_influence
+    influence_C = states_C[-1] / total_influence
+
+    # Generate a unified, actionable response based on the influences
+    response = (
+        f"In response to '{user_query}', "
+        f"The Catalyst recommends exploring bold and imaginative designs (Influence: {influence_A:.2f}). "
+        f"The Harmonizer suggests integrating elements that resonate emotionally (Influence: {influence_B:.2f}). "
+        f"Meanwhile, The Observer advises careful analysis and thoughtful consideration (Influence: {influence_C:.2f}). "
+        f"An approach that balances these perspectives is advised."
+    )
+
+    return response
+
+# Executing the function with the adapted method
+response = three_body
