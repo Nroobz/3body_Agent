@@ -53,39 +53,24 @@ def run_simulation(sim, duration, dt):
         sim.update_system(dt)
     return positions
 
-def parse_command(input_string):
-    if input_string.startswith("/start"):
-        return input_string[len("/start"):].strip()
-    else:
-        return None
+# Define the bodies with initial positions, velocities, and masses
+body1 = Body([100, 300], [0, -10], 5e30, data_analysis=10)
+body2 = Body([-200, -100], [10, 20], 5e30, creativity=15)
+body3 = Body([50, -200], [-20, 10], 5e30, context=20)
 
-def simulate_response_to_query(query):
-    # Simulation parameters can be dynamically adjusted based on the query
-    body1 = Body([100, 300], [0, -10], 5e30, data_analysis=10)
-    body2 = Body([-200, -100], [10, 20], 5e30, creativity=15)
-    body3 = Body([50, -200], [-20, 10], 5e30, context=20)
+# Create the simulation
+sim = ThreeBodySimulation([body1, body2, body3])
 
-    sim = ThreeBodySimulation([body1, body2, body3])
-    positions = run_simulation(sim, duration=10000, dt=1)
+# Run the simulation with a dt of 6
+positions = run_simulation(sim, duration=10000, dt=6)
 
-    plt.figure(figsize=(8, 6))
-    for i, pos in enumerate(positions):
-        pos = np.array(pos)
-        plt.plot(pos[:, 0], pos[:, 1], label=f'Body {i+1}')
-    plt.xlabel('X Position')
-    plt.ylabel('Y Position')
-    plt.title(f'Three-Body Simulation Response to Query: {query}')
-    plt.legend()
-    plt.show()
-
-def main():
-    user_input = input("Enter command: ")
-    query = parse_command(user_input)
-
-    if query is not None:
-        simulate_response_to_query(query)
-    else:
-        print("No valid command found.")
-
-if __name__ == "__main__":
-    main()
+# Plotting the results
+plt.figure(figsize=(8, 6))
+for i, pos in enumerate(positions):
+    pos = np.array(pos)
+    plt.plot(pos[:, 0], pos[:, 1], label=f'Body {i+1}')
+plt.xlabel('X Position')
+plt.ylabel('Y Position')
+plt.title('Three-Body Simulation with dt = 6')
+plt.legend()
+plt.show()
