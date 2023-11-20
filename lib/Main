@@ -1,0 +1,25 @@
+def main_three_body_narrative_function(user_query):
+    # Step 1: Analyze the query
+    thematic_elements = extract_thematic_elements(user_query)
+
+    # Step 2: Calculate influences for each personality
+    catalyst_influence, harmonizer_influence, observer_influence = calculate_personalities_influence(thematic_elements)
+
+    # Step 3: Simulate interactions between personalities
+    interaction_outcomes = simulate_personality_interactions(catalyst_influence, harmonizer_influence, observer_influence)
+
+    # Step 4: Build narrative based on interactions
+    narrative_segments = build_narrative(interaction_outcomes)
+
+    # Step 5: Integrate narrative segments
+    complete_narrative = integrate_narrative_segments(narrative_segments)
+
+    # Step 6: Generate final output
+    final_narrative = generate_final_output(complete_narrative)
+
+    return final_narrative
+
+# Example usage
+query = "A mysterious figure arrives in a small town, uncovering secrets."
+story = main_three_body_narrative_function(query)
+print(story)
