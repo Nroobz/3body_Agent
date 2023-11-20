@@ -1,90 +1,61 @@
-def three_body_query_influenced_response(user_query, iterations=6):
+def creative_three_body_response_with_calculations(user_query):
     """
-    A function that simulates the dynamic interactions of three personalities, incorporating psychological concepts 
-    and the influence of a user query, to generate a response, with a visual display of each iteration.
+    A function that uses the numerical influences of three personalities to guide the AI's choice of words 
+    and phrases, forming a unique and creative response, along with displaying the calculations.
     """
 
     def three_body_influence_on_query(query_length):
-        """
-        Apply unique transformations by each of the three personas to the query length,
-        and combine them to form a unique value.
-        """
-
-        # The Catalyst: Amplifies the query length
         catalyst_effect = math.sqrt(query_length)
-
-        # The Harmonizer: Moderates the query length
         harmonizer_effect = math.log1p(query_length)
-
-        # The Observer: Applies rational scaling
         observer_effect = query_length / (1 + query_length)
-
-        # Combining the effects
         combined_effect = (catalyst_effect + harmonizer_effect + observer_effect) / 3
-
-        # Normalizing the combined effect to a scale of 0 to 1
         normalized_effect = combined_effect / 10
         normalized_effect = round(normalized_effect, 2)
+        return normalized_effect, catalyst_effect, harmonizer_effect, observer_effect
 
-        return normalized_effect
+    query_influence, catalyst_effect, harmonizer_effect, observer_effect = three_body_influence_on_query(len(user_query))
 
-    # Query influence factor based on the new method
-    query_influence = three_body_influence_on_query(len(user_query))
-
-    # Initialize attributes for each personality, influenced by the query
+    # Initialize attributes and associated words for each personality
     personality_A = {"Social Influence": random.uniform(0, 1) * query_influence, "Leadership": random.uniform(0, 1) * query_influence}
+    words_A = ["innovation", "boldness", "leadership"]
     personality_B = {"Emotional Intelligence": random.uniform(0, 1) * query_influence, "Adaptive Coping": random.uniform(0, 1) * query_influence}
+    words_B = ["empathy", "connection", "harmony"]
     personality_C = {"Cognitive Insight": random.uniform(0, 1) * query_influence, "Mindfulness": random.uniform(0, 1) * query_influence}
+    words_C = ["analysis", "insight", "clarity"]
 
-    # Variables to store the state of each personality at each iteration
-    states_A = []
-    states_B = []
-    states_C = []
+    # Single iteration of personality interactions
+    interaction_effect_A = personality_A['Social Influence'] * 0.1 + personality_A['Leadership'] * 0.1
+    interaction_effect_B = personality_B['Emotional Intelligence'] * 0.1 + personality_B['Adaptive Coping'] * 0.1
+    interaction_effect_C = personality_C['Cognitive Insight'] * 0.1 + personality_C['Mindfulness'] * 0.1
 
-    for _ in range(iterations):
-        # Simulate psychological interactions
-        interaction_effect_A = personality_A['Social Influence'] * 0.1 + personality_A['Leadership'] * 0.1
-        interaction_effect_B = personality_B['Emotional Intelligence'] * 0.1 + personality_B['Adaptive Coping'] * 0.1
-        interaction_effect_C = personality_C['Cognitive Insight'] * 0.1 + personality_C['Mindfulness'] * 0.1
+    personality_A = {k: max(0, min(v + interaction_effect_A, 1)) for k, v in personality_A.items()}
+    personality_B = {k: max(0, min(v + interaction_effect_B, 1)) for k, v in personality_B.items()}
+    personality_C = {k: max(0, min(v + interaction_effect_C, 1)) for k, v in personality_C.items()}
 
-        # Update each personality based on interactions
-        personality_A = {k: max(0, min(v + interaction_effect_A, 1)) for k, v in personality_A.items()}
-        personality_B = {k: max(0, min(v + interaction_effect_B, 1)) for k, v in personality_B.items()}
-        personality_C = {k: max(0, min(v + interaction_effect_C, 1)) for k, v in personality_C.items()}
+    # Calculating the influence of each personality
+    total_influence = sum(personality_A.values()) + sum(personality_B.values()) + sum(personality_C.values())
+    influence_A = sum(personality_A.values()) / total_influence
+    influence_B = sum(personality_B.values()) / total_influence
+    influence_C = sum(personality_C.values()) / total_influence
 
-        # Record the state of each personality at this iteration
-        states_A.append(sum(personality_A.values()))
-        states_B.append(sum(personality_B.values()))
-        states_C.append(sum(personality_C.values()))
-
-    # Plotting the states of each personality over iterations
-    plt.figure(figsize=(10, 6))
-    plt.plot(range(1, iterations + 1), states_A, marker='o', label='The Catalyst')
-    plt.plot(range(1, iterations + 1), states_B, marker='o', label='The Harmonizer')
-    plt.plot(range(1, iterations + 1), states_C, marker='o', label='The Observer')
-    plt.title(f"Personality Dynamics Over {iterations} Iterations (Influenced by Query)")
-    plt.xlabel("Iteration")
-    plt.ylabel("Cumulative Attributes")
-    plt.legend()
-    plt.grid(True)
-    plt.show()
-
-    # Calculate the overall influence of each personality
-    total_influence = states_A[-1] + states_B[-1] + states_C[-1]
-    influence_A = states_A[-1] / total_influence
-    influence_B = states_B[-1] / total_influence
-    influence_C = states_C[-1] / total_influence
-
-    # Generate a unified, actionable response based on the influences
+    # Forming the creative response
     response = (
-        f"In response to '{user_query}', "
-        f"The Catalyst recommends exploring bold and imaginative designs (Influence: {influence_A:.2f}). "
-        f"The Harmonizer suggests integrating elements that resonate emotionally (Influence: {influence_B:.2f}). "
-        f"Meanwhile, The Observer advises careful analysis and thoughtful consideration (Influence: {influence_C:.2f}). "
-        f"An approach that balances these perspectives is advised."
+        f"In response to '{user_query}', a blend of {', '.join(random.sample(words_A, int(round(influence_A * len(words_A)))))}, "
+        f"{', '.join(random.sample(words_B, int(round(influence_B * len(words_B)))))}, and "
+        f"{', '.join(random.sample(words_C, int(round(influence_C * len(words_C)))))} is advised. "
+        f"This harmonious mix mirrors the unique strengths of each personality, creating a multifaceted and balanced approach."
     )
 
-    return response
+    calculations = {
+        "Query Influence": query_influence,
+        "Catalyst Effect": catalyst_effect,
+        "Harmonizer Effect": harmonizer_effect,
+        "Observer Effect": observer_effect,
+        "Influence A": influence_A,
+        "Influence B": influence_B,
+        "Influence C": influence_C
+    }
 
-# Executing the function with the adapted method
-response = three_body
+    return response, calculations
+
+# This is the completed function, ready for use.
