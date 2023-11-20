@@ -1,0 +1,38 @@
+def extract_thematic_elements(query):
+    """
+    Uses AI's NLP capabilities to analyze the query and extract key thematic elements.
+
+    Args:
+    query (str): The user's query or story prompt.
+
+    Returns:
+    dict: A dictionary containing identified thematic elements.
+    """
+    thematic_elements = {
+        "characters": [],
+        "settings": [],
+        "conflicts": []
+    }
+
+    # Example of AI parsing and extraction logic
+    # This is a conceptual representation; actual implementation would use ChatGPT's NLP capabilities
+    tokens = query.split()  # Simple tokenization for illustration
+
+    # Parsing tokens to identify thematic elements
+    for i, token in enumerate(tokens):
+        # Identify characters
+        if token.lower() in ["figure", "inventor", "hero", "villain"]:
+            character = " ".join(tokens[i-1:i+1])  # Simplistic approach for demonstration
+            thematic_elements["characters"].append(character)
+        
+        # Identify settings
+        if token.lower() in ["town", "city", "village"]:
+            setting = " ".join(tokens[i-1:i+1])
+            thematic_elements["settings"].append(setting)
+
+        # Identify conflicts
+        if token.lower() in ["conflict", "challenge", "mystery"]:
+            conflict = " ".join(tokens[i:i+2])
+            thematic_elements["conflicts"].append(conflict)
+
+    return thematic_elements
