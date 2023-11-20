@@ -1,3 +1,5 @@
+Messing around...
+
 # 3body_Agent
 
 #AI Interaction Based on the Three-Body Conceptual Model
